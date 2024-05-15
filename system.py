@@ -22,7 +22,6 @@ GPIO.setup(motion, GPIO.IN)
 servo = GPIO.PWM(servo, 50)
 servo.start(7.5)
 
-
 # turn on and off the green/red led
 def lightStatus(state):
     if state == 'close':
@@ -55,8 +54,7 @@ def doorStatus(state):
     else:
         #close
         servo.ChangeDutyCycle(2.5)
-    
-    
+      
 # used to detected motion
 def motionDetection(userIn):
 
@@ -119,4 +117,4 @@ def ultrasonic_read(trig_pin, echo_pin):
 while True:
     lightStatus('open')
     if motionDetection(False):
-        ultrasonic_read(dist_t, dist_eco)
+        ultrasonic_read(dist_t, dist_eco) 
