@@ -40,6 +40,7 @@ def buzzOn():
 # used to take photo of the client
 def video(state):
     my_camera = PiCamera()
+    
     if state:
         camera.start_recording('/home/pi/Desktop/video.h264')
     else:
@@ -52,7 +53,7 @@ def doorStatus(state):
         # open
         servo.ChangeDutyCycle(12.5)
     else:
-        #close
+        # close
         servo.ChangeDutyCycle(2.5)
       
 # used to detected motion
@@ -61,9 +62,9 @@ def motionDetection(userIn):
     # current is used to make the sensor work for 0.5 sec
     current = time.time()
     
-# works in two conditions
-    # if !userIn, if something detected call ultrasonic
-    # if userIn, if something detected buzzOn    
+    # works in two conditions
+        # if !userIn, if something detected call ultrasonic
+        # if userIn, if something detected buzzOn
     while not (GPIO.input(motion)) or (userIn and time.time() > current + 0.5):
         if GPIO.input(motion):
             if userIn:
@@ -77,32 +78,34 @@ def ultrasonic_read(trig_pin, echo_pin):
     GPIO.output(trig_pin, GPIO.HIGH)
     time.sleep(0.00001)
     GPIO.output(trig_pin, GPIO.LOW)
+    
     while GPIO.input(echo_pin)==0:
         pulse_start = time.time()
+    
     while GPIO.input(echo_pin)==1:
         pulse_end = time.time()
+    
     pulse_duration = pulse_end - pulse_start
     distance = pulse_duration * 17150
 
-# userClose is used to check that the user got close to the 
+    # userClose is used to check that the user got close to the 
     userClose = False
-# userDone is used to check that the user left the atm (break the loop)
+    # userDone is used to check that the user left the atm (break the loop)
     userDone = False
 
     enteredTime = time.time()
 
     while not (userDone) or (time.time() > enteredTime + 10 and not (userClose)):
-        if distance < 40 and not (userClose):
-            # user is close to the atm
-
+        if distance < 40 and not (userClose):       # user is close to the atm
             # take pic once
             if not (userClose):
                 video(True)
+            
             userClose = True
             lightStatus('close')
             doorStatus('close')
-        if distance > 40 and userClose:
-            # user left the atm
+            
+        if distance > 40 and userClose:             # user left the atm
             video(False)
             time.sleep(10)
             lightStatus = 'open'
